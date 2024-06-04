@@ -1,0 +1,13 @@
+services:
+    symfony_app:
+        user: app
+        build:
+            context: .
+            args:
+                USER_ID: ${USER_ID}
+        ports:
+            - "3813:3813"
+        volumes:
+            - .:/app:rw
+        environment:
+            - APP_ENV=dev
