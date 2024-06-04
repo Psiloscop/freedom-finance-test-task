@@ -11,3 +11,36 @@ services:
             - .:/app:rw
         environment:
             - APP_ENV=dev
+        depends_on:
+            - mysql
+        networks:
+            - freedom-finance
+    mysql:
+        image: mysql:latest
+        restart: always
+        volumes:
+            - ./mysql:/var/lib/mysql:rw,z
+        environment:
+            MYSQL_USER: "${MYSQL_USER}"
+            MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+            MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+            MYSQL_DATABASE: "${MYSQL_DB_NAME}"
+        networks:
+            - freedom-finance
+    pma:
+        image: phpmyadmin:latest
+        restart: on-failure
+        ports:
+            - 3873:80
+        depends_on:
+            - mysql
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=mysql
+            - 'PMA_USER=${MYSQL_USER}'
+            - 'PMA_PASSWORD=${MYSQL_PASSWORD}'
+        networks:
+            - freedom-finance
+networks:
+    freedom-finance:
+        driver: bridge
