@@ -1,6 +1,6 @@
 FROM php:8.3-cli-alpine as symfony_app
 RUN apk add --no-cache git zip bash
-RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install pdo_mysql bcmath
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Setup php app user
