@@ -2,7 +2,8 @@
 
 namespace App\Repository;
 
-use DateTime;
+use Exception;
+use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Exchange;
@@ -17,7 +18,7 @@ class ExchangeRepository extends ServiceEntityRepository
         parent::__construct($registry, Exchange::class);
     }
 
-    public function findExchangeRateInCache(DateTime $date, string $currency, string $baseCurrency): ?Exchange
+    public function findExchangeRateInCache(DateTimeInterface $date, string $currency, string $baseCurrency): ?Exchange
     {
         return $this->createQueryBuilder('e')
             ->andWhere('e.date = :date')
@@ -32,9 +33,9 @@ class ExchangeRepository extends ServiceEntityRepository
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
-    public function saveExchangeRateBatchToCache(DateTime $date, array $currencyMap, string $baseCurrency): void
+    public function saveExchangeRateBatchToCache(DateTimeInterface $date, array $currencyMap, string $baseCurrency): void
     {
         $queryBuilder = $this->createQueryBuilder('e')
             ->andWhere('e.date = :date')

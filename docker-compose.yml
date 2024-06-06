@@ -6,7 +6,7 @@ services:
             args:
                 USER_ID: ${USER_ID}
         ports:
-            - "3813:3813"
+            - 3810:3813
         volumes:
             - .:/app:rw
         environment:
@@ -31,7 +31,7 @@ services:
         image: phpmyadmin:latest
         restart: on-failure
         ports:
-            - 3873:80
+            - 3811:80
         depends_on:
             - mysql
         environment:
@@ -39,6 +39,17 @@ services:
             - PMA_HOST=mysql
             - 'PMA_USER=${MYSQL_USER}'
             - 'PMA_PASSWORD=${MYSQL_PASSWORD}'
+        networks:
+            - freedom-finance
+    rabbitmq:
+        image: rabbitmq:3-management-alpine
+        restart: on-failure
+        ports:
+            - 3812:5672
+            - 3813:15672
+        volumes:
+            - ./rabbitmq/data/:/var/lib/rabbitmq
+            - ./rabbitmq/log/:/var/log/rabbitmq
         networks:
             - freedom-finance
 networks:

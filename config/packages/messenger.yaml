@@ -5,13 +5,21 @@ framework:
 
         transports:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
-
+             async_fetch_exchange_rate_from_cbr:
+               dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+               options:
+                 exchange:
+                    name: freedom_finance.rate_exchange.command
+                    type: direct
+                 queues:
+                   freedom_finance.rate_exchange.command.cbr:
+                      binding_keys: [ 'cbr' ]
+               rate_limiter: cbr_api
         routing:
             # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+             'App\Message\Command\FetchExchangesFromCbrCommand': async_fetch_exchange_rate_from_cbr
 
 # when@test:
 #    framework:

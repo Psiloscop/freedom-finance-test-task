@@ -1,0 +1,6 @@
+framework:
+  rate_limiter:
+    cbr_api:
+      policy: 'fixed_window'
+      limit: 1
+      interval: '10 seconds'

@@ -1,6 +1,15 @@
 FROM php:8.3-cli-alpine as symfony_app
-RUN apk add --no-cache git zip bash
+
+RUN apk add --no-cache bash
+
+RUN apk --update --no-cache add build-base \
+        autoconf \
+        rabbitmq-c-dev
+RUN pecl install amqp
+RUN docker-php-ext-enable amqp
+
 RUN docker-php-ext-install pdo_mysql bcmath
+
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Setup php app user

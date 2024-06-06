@@ -1,5 +1,6 @@
 .idea
 mysql
+rabbitmq
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
