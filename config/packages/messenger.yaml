@@ -7,7 +7,7 @@ framework:
             # https://symfony.com/doc/current/messenger.html#transport-configuration
             # failed: 'doctrine://default?queue_name=failed'
             # sync: 'sync://'
-             async_fetch_exchange_rate_from_cbr:
+          async_fetch_exchange_rate_from_cbr:
                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                options:
                  exchange:
@@ -19,7 +19,7 @@ framework:
                rate_limiter: cbr_api
         routing:
             # Route your messages to the transports
-             'App\Message\Command\FetchExchangesFromCbrCommand': async_fetch_exchange_rate_from_cbr
+             'App\Message\Command\FetchExchangeRatesFromCbrCommand': async_fetch_exchange_rate_from_cbr
 
 # when@test:
 #    framework:
