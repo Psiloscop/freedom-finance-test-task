@@ -10,7 +10,7 @@ PHONY: help
 help: ## This help.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-init: down build install up success-message console ## Initialize environment
+init: down build install up migration success-message console ## Initialize environment
 
 build: ## Build services.
 	${DC} build $(c)
@@ -36,5 +36,9 @@ install:
 	${DC_RUN} composer install
 
 success-message:
-	@echo "You can now access the application at http://localhost:3813"
-	@echo "Good luck! 🚀"
+	@echo "Project initialized!"
+
+migration:
+	@echo "Waiting..."
+	${DC_EXEC} sleep 5
+	${DC_EXEC} php bin/console --no-interaction doctrine:migrations:migrate
