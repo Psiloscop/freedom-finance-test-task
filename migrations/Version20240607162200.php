@@ -20,7 +20,7 @@ final class Version20240607162200 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE exchange (id INT AUTO_INCREMENT NOT NULL, source VARCHAR(25) NOT NULL, base_currency VARCHAR(3) NOT NULL, currency VARCHAR(3) NOT NULL, rate VARCHAR(25) NOT NULL, date DATE NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE IF NOT EXISTS exchange (id INT AUTO_INCREMENT NOT NULL, source VARCHAR(25) NOT NULL, base_currency VARCHAR(3) NOT NULL, currency VARCHAR(3) NOT NULL, rate VARCHAR(25) NOT NULL, date DATE NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
