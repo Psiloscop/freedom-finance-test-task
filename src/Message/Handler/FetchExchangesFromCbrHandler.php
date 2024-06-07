@@ -1,6 +1,6 @@
 <?php
 
-namespace App\MessageHandler\Command;
+namespace App\Message\Handler;
 
 use Exception;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -23,11 +23,14 @@ class FetchExchangesFromCbrHandler
      */
     public function __invoke(FetchExchangeRatesFromCbrCommand $command): void
     {
+//        throw new Exception("Error in " . __CLASS__);
+
         $currencyMap = SbrClientService::getDailyCurrencyMap([
             'date_req' => date('d/m/Y', $command->getDate()->getTimestamp())
         ]);
 
         $this->exchangeRepository->saveExchangeRateBatchToCache(
+            $command->getSource(),
             $command->getDate(),
             $currencyMap,
             'RUR',

@@ -35,7 +35,7 @@ class ExchangeRepository extends ServiceEntityRepository
     /**
      * @throws Exception
      */
-    public function saveExchangeRateBatchToCache(DateTimeInterface $date, array $currencyMap, string $baseCurrency): void
+    public function saveExchangeRateBatchToCache(string $source, DateTimeInterface $date, array $currencyMap, string $baseCurrency): void
     {
         $queryBuilder = $this->createQueryBuilder('e')
             ->andWhere('e.date = :date')
@@ -55,6 +55,7 @@ class ExchangeRepository extends ServiceEntityRepository
             }
 
             $exchange = new Exchange();
+            $exchange->setSource($source);
             $exchange->setDate($date);
             $exchange->setCurrency($currency);
             $exchange->setRate($rate);

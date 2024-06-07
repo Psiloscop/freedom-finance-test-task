@@ -11,6 +11,8 @@ interface FetchExchangeRatesCommandInterface
 {
     function getRoutingKey(): string;
 
+    function getSource(): string;
+
     function getTimezone(): DateTimeZone;
 
     function setDate(DateTimeInterface $date): void;

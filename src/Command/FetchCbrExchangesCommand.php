@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use DateTime;
-use DateTimeZone;
 use DateInterval;
 use Exception;
 use Psr\Container\ContainerInterface;

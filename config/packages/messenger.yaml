@@ -1,25 +1,32 @@
 framework:
-    messenger:
-        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
-        # failure_transport: failed
+  messenger:
+    # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+    # failure_transport: failed
 
-        transports:
-            # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
-          async_fetch_exchange_rate_from_cbr:
-               dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-               options:
-                 exchange:
-                    name: freedom_finance.rate_exchange.command
-                    type: direct
-                 queues:
-                   freedom_finance.rate_exchange.command.cbr:
-                      binding_keys: [ 'cbr' ]
-               rate_limiter: cbr_api
-        routing:
-            # Route your messages to the transports
-             'App\Message\Command\FetchExchangeRatesFromCbrCommand': async_fetch_exchange_rate_from_cbr
+    transports:
+      # https://symfony.com/doc/current/messenger.html#transport-configuration
+      # failed: 'doctrine://default?queue_name=failed'
+      # sync: 'sync://'
+
+      async_fetch_exchange_rate_from_cbr:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN_RABBITMQ)%'
+        options:
+          exchange:
+            name: freedom_finance.rate_exchange.command
+            type: direct
+          queues:
+            freedom_finance.rate_exchange.command.cbr:
+              binding_keys: [ 'cbr' ]
+        rate_limiter: cbr_api
+        failure_transport: failure_fetch_exchange_rate_from_cbr
+
+      failure_fetch_exchange_rate_from_cbr:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN_DOCTRINE)%'
+        options:
+          queue_name: fetch_exchange_rate_from_cbr
+    routing:
+      # Route your messages to the transports
+      'App\Message\Command\FetchExchangeRatesFromCbrCommand': async_fetch_exchange_rate_from_cbr
 
 # when@test:
 #    framework:

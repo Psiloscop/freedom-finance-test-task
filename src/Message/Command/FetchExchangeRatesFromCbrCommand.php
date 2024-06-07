@@ -17,6 +17,11 @@ class FetchExchangeRatesFromCbrCommand implements FetchExchangeRatesCommandInter
         return 'cbr';
     }
 
+    public function getSource(): string
+    {
+        return 'cbr.ru';
+    }
+
     public function getTimezone(): DateTimeZone
     {
         return new DateTimeZone('Europe/Moscow');
