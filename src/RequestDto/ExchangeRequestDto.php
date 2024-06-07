@@ -28,6 +28,12 @@ class ExchangeRequestDto
             message: "Unfortunately, only RUR currency is supported."
         )]
         public readonly ?string $baseCurrency = 'RUR',
+
+        #[Assert\Choice(
+            options: ['cbr.ru'],
+            message: "Unfortunately, only cbr.ru source is supported."
+        )]
+        public readonly ?string $source = 'cbr.ru',
     )
     {}
 }

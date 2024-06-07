@@ -73,7 +73,7 @@ class FetchCbrExchangesCommand extends Command
         $io->note(sprintf('The exchange rates are going to be fetched for %s days.', $days));
 
         try {
-            $sourceTag = "rate_exchange_source_$source";
+            $sourceTag = "rate_exchange_command_$source";
 
             if ( !$this->fetchExchangeRatesCommands->has($sourceTag) )
             {

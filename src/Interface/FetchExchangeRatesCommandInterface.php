@@ -13,6 +13,8 @@ interface FetchExchangeRatesCommandInterface
 
     function getSource(): string;
 
+    function getBaseCurrency(): string;
+
     function getTimezone(): DateTimeZone;
 
     function setDate(DateTimeInterface $date): void;

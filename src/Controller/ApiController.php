@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
+use App\Interface\ExchangeRateServiceInterface;
 use Exception;
 use DateTime;
 use DateInterval;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use App\Service\SbrClientService;
 use App\RequestDto\ExchangeRequestDto;
 use App\Repository\ExchangeRepository;
 
@@ -18,6 +20,7 @@ class ApiController extends AbstractController
     #[Route('/exchange', name: 'app_exchange')]
     public function exchange(
         #[MapRequestPayload] ExchangeRequestDto $exchangeRequest,
+        #[TaggedLocator(ExchangeRateServiceInterface::class)] ContainerInterface $exchangeRateServices,
         ExchangeRepository $exchangeRepository
     ): JsonResponse
     {
@@ -36,13 +39,30 @@ class ApiController extends AbstractController
             $exchangeRequest->baseCurrency
         );
 
+        $serviceTag = "rate_exchange_service_$exchangeRequest->source";
+
+        if ( !$exchangeRateServices->has($serviceTag) )
+        {
+            return new JsonResponse([
+                'errors' => [
+                    sprintf('Source "%s" not supported.', $exchangeRequest->source)
+                ],
+            ], 400);
+        }
+
+        /**
+         * @var ExchangeRateServiceInterface $rateExchangeService
+         */
+        $rateExchangeService = $exchangeRateServices->get($serviceTag);
+
         if ( $exchangeRateForCurrentDay === null )
         {
             try
             {
-                $currencyMap = SbrClientService::getDailyCurrencyMap(['date_req' => date('d/m/Y', $currentDay->getTimestamp())]);
+                $currencyMap = $rateExchangeService->fetchData($currentDay, $exchangeRequest->baseCurrency);
 
                 $exchangeRepository->saveExchangeRateBatchToCache(
+                    $exchangeRequest->source,
                     $currentDay,
                     $currencyMap,
                     $exchangeRequest->baseCurrency,
@@ -66,9 +86,10 @@ class ApiController extends AbstractController
         {
             try
             {
-                $currencyMap = SbrClientService::getDailyCurrencyMap(['date_req' => date('d/m/Y', $previousDay->getTimestamp())]);
+                $currencyMap = $rateExchangeService->fetchData($previousDay, $exchangeRequest->baseCurrency);
 
                 $exchangeRepository->saveExchangeRateBatchToCache(
+                    $exchangeRequest->source,
                     $previousDay,
                     $currencyMap,
                     $exchangeRequest->baseCurrency,
