@@ -13,7 +13,7 @@ use App\Message\Command\FetchExchangeRatesFromCbrCommand;
 #[AsMessageHandler(
     fromTransport: 'async_fetch_exchange_rate_from_cbr'
 )]
-class FetchExchangesHandler
+class FetchExchangeRatesHandler
 {
     public function __construct(
         #[TaggedLocator(ExchangeRateServiceInterface::class)] private readonly ContainerInterface $exchangeRateServices,
