@@ -43,7 +43,7 @@ class FetchCbrExchangesCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Defines the exchange rate source.',
-                'cbr'
+                'cbr.ru'
             )
             ->addOption(
                 self::OPTION_DAYS,

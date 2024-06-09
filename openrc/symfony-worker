@@ -1,0 +1,39 @@
+#!/sbin/openrc-run
+
+name="symfony-worker"
+description="Symfony worker service"
+command="php /app/bin/console messenger:consume"
+command_args="async_fetch_exchange_rate_from_cbr --time-limit=3600"
+command_user="root"
+pidfile="/var/run/symfony-worker.pid"
+logfile="/var/log/symfony-worker.log"
+errorfile="/var/log/symfony-worker-error.log"
+
+depend() {
+    need net
+}
+
+start_pre() {
+    checkpath --file --owner $command_user:$command_user $pidfile
+    checkpath --file --owner $command_user:$command_user $logfile
+    checkpath --file --owner $command_user:$command_user $errorfile
+}
+
+start() {
+    ebegin "Starting ${name}"
+    start-stop-daemon --start --background --pidfile ${pidfile} --make-pidfile \
+        --exec ${command} -- ${command_args} >> ${logfile} 2>> ${errorfile}
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping ${name}"
+    start-stop-daemon --stop --pidfile ${pidfile}
+    eend $?
+}
+
+restart() {
+    stop
+    sleep 1
+    start
+}

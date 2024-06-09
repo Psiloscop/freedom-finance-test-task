@@ -15,6 +15,7 @@ services:
             - mysql
         networks:
             - freedom-finance
+        hostname: symfony-app
     mysql:
         image: mysql:latest
         restart: always
