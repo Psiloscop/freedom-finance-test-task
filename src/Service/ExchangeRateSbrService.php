@@ -40,9 +40,20 @@ class ExchangeRateSbrService implements ExchangeRateServiceInterface
             throw new Exception("Parse error");
         }
 
-        if ( count($data) == 1 && is_string($data[0]) )
+        if ( count($data) == 1 )
         {
-            throw new Exception("Error response from cbr.ru: " . trim($data[0]));
+            $errorMsg = "Unexpected response.";
+
+            if ( array_is_list($data) && is_string($data[0]) )
+            {
+                $errorMsg = trim($data[0]);
+            }
+            else if ( isset($data["@attributes"]["name"]) )
+            {
+                $errorMsg = trim($data["@attributes"]["name"]);
+            }
+
+            throw new Exception("Error response from cbr.ru: $errorMsg");
         }
 
         $currencyMap = [];
