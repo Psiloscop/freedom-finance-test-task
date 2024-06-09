@@ -29,7 +29,6 @@ VOLUME ["/sys/fs/cgroup"]
 COPY ./openrc/symfony-worker /etc/init.d
 RUN chmod +x /etc/init.d/symfony-worker
 RUN rc-update add symfony-worker default
-RUN #rc-service symfony-worker start
 ## OpenRC initialization
 
 COPY . /app
