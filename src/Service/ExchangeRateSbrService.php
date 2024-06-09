@@ -28,7 +28,12 @@ class ExchangeRateSbrService implements ExchangeRateServiceInterface
      */
     public function fetchData(DateTimeInterface $date, string $baseCurrency): array
     {
-        $xml = simplexml_load_file("https://www.cbr.ru/scripts/XML_daily.asp?date_req={$date->format('d/m/Y')}");
+        $xml = @simplexml_load_file("https://www.cbr.ru/scripts/XML_daily.asp?date_req={$date->format('d/m/Y')}");
+
+        if ( $xml === false )
+        {
+            throw new Exception(sprintf("cbr.ru - Error response: %s", error_get_last()['message']));
+        }
 
         try
         {
@@ -37,7 +42,7 @@ class ExchangeRateSbrService implements ExchangeRateServiceInterface
         }
         catch ( JsonException )
         {
-            throw new Exception("Parse error");
+            throw new Exception(sprintf("cbr.ru - Converting to JSON error: %s", $xml));
         }
 
         if ( count($data) == 1 )
@@ -53,7 +58,7 @@ class ExchangeRateSbrService implements ExchangeRateServiceInterface
                 $errorMsg = trim($data["@attributes"]["name"]);
             }
 
-            throw new Exception("Error response from cbr.ru: $errorMsg");
+            throw new Exception(sprintf("cbr.ru - Error response: %s", $errorMsg));
         }
 
         $currencyMap = [];
