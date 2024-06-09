@@ -35,6 +35,6 @@ RUN #rc-service symfony-worker start
 COPY . /app
 WORKDIR /app
 
-EXPOSE 3813
+EXPOSE 3810
 
-CMD ["php", "-S", "0.0.0.0:3813", "-t", "public"]
+CMD ["php", "-S", "0.0.0.0:3810", "-t", "public"]

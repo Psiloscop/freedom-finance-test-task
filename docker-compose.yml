@@ -3,7 +3,7 @@ services:
         build:
             context: .
         ports:
-            - 3810:3813
+            - 3810:3810
         volumes:
             - .:/app:rw
         environment:
