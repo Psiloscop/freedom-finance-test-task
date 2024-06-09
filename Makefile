@@ -1,6 +1,4 @@
-USER_ID=$(shell id -u)
-
-DC = @USER_ID=$(USER_ID) docker compose
+DC = docker compose
 DC_RUN = ${DC} run --rm symfony_app
 DC_EXEC = ${DC} exec symfony_app
 

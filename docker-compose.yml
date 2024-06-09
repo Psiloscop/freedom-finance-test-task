@@ -1,10 +1,7 @@
 services:
     symfony_app:
-        user: app
         build:
             context: .
-            args:
-                USER_ID: ${USER_ID}
         ports:
             - 3810:3813
         volumes:
