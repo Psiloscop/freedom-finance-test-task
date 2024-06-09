@@ -42,7 +42,7 @@ class ExchangeRateSbrService implements ExchangeRateServiceInterface
 
         if ( count($data) == 1 && is_string($data[0]) )
         {
-            throw new Exception("Error response from CBR: " . trim($data[0]));
+            throw new Exception("Error response from cbr.ru: " . trim($data[0]));
         }
 
         $currencyMap = [];

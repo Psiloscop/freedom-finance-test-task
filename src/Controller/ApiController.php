@@ -17,7 +17,7 @@ use App\Repository\ExchangeRepository;
 
 class ApiController extends AbstractController
 {
-    #[Route('/exchange', name: 'app_exchange')]
+    #[Route('/exchange', name: 'app_exchange', methods: ['POST'])]
     public function exchange(
         #[MapRequestPayload] ExchangeRequestDto $exchangeRequest,
         #[TaggedLocator(ExchangeRateServiceInterface::class)] ContainerInterface $exchangeRateServices,
